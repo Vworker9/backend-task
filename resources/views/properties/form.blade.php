@@ -41,9 +41,27 @@
         </div>
     </div>
     <div class="mb-3 row">
+        <label class="col-md-4 form-label">Latitude</label>
+        <div class="col-md-8">
+            <input type="text" name="latitude" value="{{ $property->latitude ? $property->latitude : old('latitude') }}" class="form-control" required />
+        </div>
+    </div>
+    <div class="mb-3 row">
+        <label class="col-md-4 form-label">Longitude</label>
+        <div class="col-md-8">
+            <input type="text" name="longitude" value="{{ $property->longitude ? $property->longitude : old('longitude') }}" class="form-control" required />
+        </div>
+    </div>
+    <div class="mb-3 row">
         <label class="col-md-4 form-label">Description</label>
         <div class="col-md-8">
             <textarea name="description" class="form-control" required>{{ $property->description ? $property->description : old('description') }}</textarea>
+        </div>
+    </div>
+    <div class="mb-3 row">
+        <label class="col-md-4 form-label">Full Detail URL</label>
+        <div class="col-md-8">
+            <input type="url" name="full_detail_url" value="{{ $property->full_detail_url ? $property->full_detail_url : old('full_detail_url') }}" class="form-control" required />
         </div>
     </div>
     <div class="mb-3 row">
@@ -108,7 +126,7 @@
         </div>
     </div>
     <div class="mb-3">
-        <button class="btn btn-primary btn-sm">Add Property</button>
+        <button class="btn btn-primary btn-sm">{{ $formType == "edit" ? "Update" : "Add" }} Property</button>
     </div>
 </form>
 
@@ -121,14 +139,15 @@
                 property_type: "Please select property type",
                 county: "Please enter county",
                 town: "Please enter town",
-                city: "Please enter city",
                 country: "Please enter country",
+                latitude: "Please enter Latitude",
+                longitude: "Please enter Longitude",
                 postcode: "Please enter postcode",
                 description: "Please enter description",
+                full_detail_url: "Please enter full detail url",
                 displayable_address: "Please enter displayable address",
                 image: "Please select image",
                 no_of_bedrooms: "Please select no of bedrooms",
-                no_of_bathrooms: "Please select no of bathrooms",
                 price: "Please enter property price",
             },
         });

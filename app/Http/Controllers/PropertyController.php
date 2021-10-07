@@ -17,10 +17,18 @@ class PropertyController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $properties = Property::paginate(10);
-        return view($this->viewFolder . "index", compact("properties"));
+        $properties = Property::query();
+        $search = $request->get("search");
+        if(!empty($search)) {
+            $columns = ["property_type", "county", "town", "country", "postcode", "description", "displayable_address", "image_url", "thumbnail_url", "no_of_bedrooms", "no_of_bathrooms", "price", "property_for", "full_detail_url", "latitude", "longitude"];
+            foreach ($columns as $column) {
+                $properties = $properties->orWhere($column, "LIKE", "%" . $search . "%");
+            }
+        }
+        $properties = $properties->paginate(10);
+        return view($this->viewFolder . "index", compact("properties", "search"));
     }
 
     /**
@@ -47,6 +55,7 @@ class PropertyController extends Controller
             "county" => "required",
             "town" => "required",
             "country" => "required",
+            "full_detail_url" => "required",
             "postcode" => "required",
             "description" => "required",
             "displayable_address" => "required",
@@ -54,6 +63,8 @@ class PropertyController extends Controller
             "no_of_bedrooms" => "required",
             "no_of_bathrooms" => "required",
             "price" => "required",
+            "latitude" => "required",
+            "longitude" => "required",
         ]);
 
         $property = new Property();
@@ -100,11 +111,14 @@ class PropertyController extends Controller
             "country" => "required",
             "postcode" => "required",
             "description" => "required",
+            "full_detail_url" => "required",
             "displayable_address" => "required",
             "image" => "image",
             "no_of_bedrooms" => "required",
             "no_of_bathrooms" => "required",
             "price" => "required",
+            "latitude" => "required",
+            "longitude" => "required",
         ]);
 
         $this->saveProperty($request, $property);
@@ -124,6 +138,9 @@ class PropertyController extends Controller
         $property->no_of_bathrooms = $request->no_of_bathrooms;
         $property->price = $request->price;
         $property->property_for = $request->property_for;
+        $property->full_detail_url = $request->full_detail_url;
+        $property->latitude = $request->latitude;
+        $property->longitude = $request->longitude;
         $property->save();
         
         if($request->hasFile("image")) {
